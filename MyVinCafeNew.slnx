@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="MyVinCafeNewApi/MyVinCafeNewApi.csproj" />
+  <Project Path="MyVinCafeNewLibrary/MyVinCafeNewLibrary.csproj" Id="1cc25d97-efa3-4865-b00f-49f445db1e3b" />
+</Solution>
