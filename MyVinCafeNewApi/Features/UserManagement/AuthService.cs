@@ -19,6 +19,8 @@ namespace MyVinCafeNewApi.Features.UserManagement
             _context = context;
         }
 
+
+
         public async Task<bool> RegisterAsync(UserRegisterDto request)
         {
             if (await _context.Users.AnyAsync(u => u.Username == request.Username))
