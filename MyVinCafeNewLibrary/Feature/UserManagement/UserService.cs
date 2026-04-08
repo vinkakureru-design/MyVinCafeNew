@@ -1,0 +1,62 @@
+﻿using MyVinCafeNewLibrary.Data;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using MyVinCafeNewLibrary.Feature.UserManagement;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer;
+
+namespace MyVinCafeNewLibrary.Feature.UserManagement
+{
+    public class UserService : IUserService
+    {
+        private readonly AppDbContext _context;
+        public UserService(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<UserLogin> LoginAsync(UserLogin request)
+        {
+            var userDb = _context.Users.FirstOrDefault(u => u.Username == request.UserName && u.PasswordHash == request.Password);
+
+            if (userDb == null)
+            {
+                throw new Exception("Akun tidak ditemukan");
+            }
+
+            await _context.SaveChangesAsync();
+            return new UserLogin
+            {
+                UserName = userDb.Username,
+                Password = userDb.PasswordHash
+            };
+
+        }
+
+        public async Task<bool> RegisterAsync(UserRegister request)
+        {
+            var cekUsername = await _context.Users.AnyAsync(u => u.Username == request.Username);
+
+            if (cekUsername)
+            {
+                throw new Exception("Username sudah digunakan");
+            }
+
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.PasswordHash);
+
+            var userBaru = new UserModel
+            {
+                Username = request.Username,
+                PasswordHash = passwordHash,
+                Email = request.Email,
+                Phone = request.Phone,
+                Role = "Memnber"
+            };
+
+            _context.Users.Add(userBaru);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+    }
+}
