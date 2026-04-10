@@ -8,10 +8,10 @@ namespace MyVinCafeNewLibrary.Feature.MenuProdukManagement
 {
     public interface IMenuService
     {
-        Task<List<MenuTambahDto>> GetAllMenuAsync();
-        Task<MenuDto> GetMenuByIdAsync(int id);
-        Task<bool> CreateMenuAsync(MenuTambahDto request);
-        Task<MenuDto> UpdateMenuAsync(MenuTambahDto request);
+        Task<List<MenuModels>> GetAllMenuAsync();
+        Task<MenuModels> GetMenuByIdAsync(int id);
+        Task<bool> CreateMenuAsync(MenuModels request);
+        Task<MenuModels> UpdateMenuAsync(MenuModels request);
         Task<bool> DeleteMenuAsync(int id);
     }
 }

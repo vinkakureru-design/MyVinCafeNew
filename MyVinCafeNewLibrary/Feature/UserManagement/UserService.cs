@@ -17,9 +17,9 @@ namespace MyVinCafeNewLibrary.Feature.UserManagement
             _context = context;
         }
 
-        public async Task<UserLogin> LoginAsync(UserLogin request)
+        public async Task<UserModel> LoginAsync(UserModel request)
         {
-            var userDb = _context.Users.FirstOrDefault(u => u.Username == request.UserName);
+            var userDb = _context.Users.FirstOrDefault(u => u.Username == request.Username);
             
 
             if (userDb == null)
@@ -27,22 +27,22 @@ namespace MyVinCafeNewLibrary.Feature.UserManagement
                 throw new Exception("Akun tidak ditemukan");
             }
 
-            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, userDb.PasswordHash);
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.PasswordHash, userDb.PasswordHash);
             if (!isPasswordValid)
             {
                 throw new Exception("Password Salah");
             }
 
             await _context.SaveChangesAsync();
-            return new UserLogin
+            return new UserModel
             {
-                UserName = userDb.Username,
-                Password = ""
+                Username = userDb.Username,
+                PasswordHash = ""
             };
 
         }
 
-        public async Task<bool> RegisterAsync(UserRegister request)
+        public async Task<bool> RegisterAsync(UserModel request)
         {
             var cekUsername = await _context.Users.AnyAsync(u => u.Username == request.Username);
 

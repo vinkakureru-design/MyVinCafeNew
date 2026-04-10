@@ -51,7 +51,7 @@ namespace MyVinCafeNewApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateMenu([FromBody ]MenuTambahDto request)
+        public async Task<IActionResult> CreateMenu([FromBody ]MenuModels request)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace MyVinCafeNewApi.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> UpdateMenu([FromBody]MenuTambahDto request)
+        public async Task<IActionResult> UpdateMenu([FromBody]MenuModels request)
         {
             try
             {

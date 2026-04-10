@@ -17,17 +17,17 @@ namespace MyVinCafeNewLibrary.Feature.MenuProdukManagement
         }
 
 
-        public async Task<List<MenuTambahDto>> GetAllMenuAsync()
-        {
+        public async Task<List<MenuModels>> GetAllMenuAsync()
+        {   
             var menuList = await _context.Menus.ToListAsync();
             if (menuList == null || menuList.Count == 0)
             {
                 throw new Exception("Menu Kosong");
             }
-            var menuDtoList = menuList.Select(menu => new MenuTambahDto
+            var menuDtoList = menuList.Select(menu => new MenuModels
             {
                 IdMenu = menu.IdMenu,
-                NameMenu = menu.NamaMenu,
+                NamaMenu = menu.NamaMenu,
                 Harga = menu.Harga,
                 Deskripsi = menu.Deskripsi,
                 Kategori = menu.Kategori,
@@ -36,7 +36,7 @@ namespace MyVinCafeNewLibrary.Feature.MenuProdukManagement
             return menuDtoList;
         }
 
-        public async Task<MenuDto> GetMenuByIdAsync(int id)
+        public async Task<MenuModels> GetMenuByIdAsync(int id)
         {
             var menu = await _context.Menus.FindAsync(id);
             if (menu == null)
@@ -44,9 +44,9 @@ namespace MyVinCafeNewLibrary.Feature.MenuProdukManagement
                 throw new Exception("Menu Tidak Ditemukan");
             }
 
-            var menuDto = new MenuDto
+            var menuDto = new MenuModels
             {
-                NameMenu = menu.NamaMenu,
+                NamaMenu = menu.NamaMenu,
                 Harga = menu.Harga,
                 Deskripsi = menu.Deskripsi,
                 Kategori = menu.Kategori,
@@ -55,7 +55,7 @@ namespace MyVinCafeNewLibrary.Feature.MenuProdukManagement
             return menuDto;
         }
 
-        public async Task<bool> CreateMenuAsync(MenuTambahDto request)
+        public async Task<bool> CreateMenuAsync(MenuModels request)
         {
             if (request.Harga <= 0)
             {
@@ -64,7 +64,7 @@ namespace MyVinCafeNewLibrary.Feature.MenuProdukManagement
 
             var menuBaru = new MenuModels
             {
-                NamaMenu = request.NameMenu,
+                NamaMenu = request.NamaMenu,
                 Harga = request.Harga,
                 Deskripsi = request.Deskripsi,
                 Kategori = request.Kategori,
@@ -75,7 +75,7 @@ namespace MyVinCafeNewLibrary.Feature.MenuProdukManagement
             return true;
         }
 
-        public async Task<MenuDto> UpdateMenuAsync(MenuTambahDto request)
+        public async Task<MenuModels> UpdateMenuAsync(MenuModels request)
         {
             var menu = await _context.Menus.FindAsync(request.IdMenu);
             if (menu == null)
@@ -87,7 +87,7 @@ namespace MyVinCafeNewLibrary.Feature.MenuProdukManagement
                 throw new Exception("Harga harus lebih besar dari 0");
             }
 
-            menu.NamaMenu = request.NameMenu;
+            menu.NamaMenu = request.NamaMenu;
             menu.Harga = request.Harga;
             menu.Deskripsi = request.Deskripsi;
             menu.Kategori = request.Kategori;
@@ -95,9 +95,9 @@ namespace MyVinCafeNewLibrary.Feature.MenuProdukManagement
 
             _context.Menus.Update(menu);
             await _context.SaveChangesAsync();
-            return new MenuDto
+            return new MenuModels
             {
-                NameMenu = menu.NamaMenu,
+                NamaMenu = menu.NamaMenu,
                 Harga = menu.Harga,
                 Deskripsi = menu.Deskripsi,
                 Kategori = menu.Kategori,

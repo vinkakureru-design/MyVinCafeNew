@@ -15,7 +15,7 @@ namespace MyVinCafeNewApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UserLogin request)
+        public async Task<IActionResult> Login([FromBody] UserModel request)
         {
             try
             {
@@ -29,7 +29,7 @@ namespace MyVinCafeNewApi.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] UserRegister request)
+        public async Task<IActionResult> Register([FromBody] UserModel request)
         {
             try
             {

@@ -6,7 +6,7 @@ namespace MyVinCafeNewLibrary.Feature.UserManagement
 {
     public interface IUserService
     {
-        Task<bool> RegisterAsync(UserRegister request);
-        Task<UserLogin> LoginAsync(UserLogin request);
+        Task<bool> RegisterAsync(UserModel request);
+        Task<UserModel> LoginAsync(UserModel request);
     }
 }
