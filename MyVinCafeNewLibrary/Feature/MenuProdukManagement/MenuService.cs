@@ -17,15 +17,16 @@ namespace MyVinCafeNewLibrary.Feature.MenuProdukManagement
         }
 
 
-        public async Task<List<MenuDto>> GetAllMenuAsync()
+        public async Task<List<MenuTambahDto>> GetAllMenuAsync()
         {
             var menuList = await _context.Menus.ToListAsync();
             if (menuList == null || menuList.Count == 0)
             {
                 throw new Exception("Menu Kosong");
             }
-            var menuDtoList = menuList.Select(menu => new MenuDto
+            var menuDtoList = menuList.Select(menu => new MenuTambahDto
             {
+                IdMenu = menu.IdMenu,
                 NameMenu = menu.NamaMenu,
                 Harga = menu.Harga,
                 Deskripsi = menu.Deskripsi,
@@ -63,7 +64,6 @@ namespace MyVinCafeNewLibrary.Feature.MenuProdukManagement
 
             var menuBaru = new MenuModels
             {
-                IdMenu = request.IdMenu,
                 NamaMenu = request.NameMenu,
                 Harga = request.Harga,
                 Deskripsi = request.Deskripsi,
@@ -86,8 +86,7 @@ namespace MyVinCafeNewLibrary.Feature.MenuProdukManagement
             {
                 throw new Exception("Harga harus lebih besar dari 0");
             }
-            
-            menu.IdMenu = request.IdMenu;
+
             menu.NamaMenu = request.NameMenu;
             menu.Harga = request.Harga;
             menu.Deskripsi = request.Deskripsi;

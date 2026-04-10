@@ -5,6 +5,7 @@ using System.Text;
 using MyVinCafeNewLibrary.Feature.UserManagement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace MyVinCafeNewLibrary.Feature.UserManagement
 {
@@ -18,18 +19,25 @@ namespace MyVinCafeNewLibrary.Feature.UserManagement
 
         public async Task<UserLogin> LoginAsync(UserLogin request)
         {
-            var userDb = _context.Users.FirstOrDefault(u => u.Username == request.UserName && u.PasswordHash == request.Password);
+            var userDb = _context.Users.FirstOrDefault(u => u.Username == request.UserName);
+            
 
             if (userDb == null)
             {
                 throw new Exception("Akun tidak ditemukan");
             }
 
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, userDb.PasswordHash);
+            if (!isPasswordValid)
+            {
+                throw new Exception("Password Salah");
+            }
+
             await _context.SaveChangesAsync();
             return new UserLogin
             {
                 UserName = userDb.Username,
-                Password = userDb.PasswordHash
+                Password = ""
             };
 
         }
