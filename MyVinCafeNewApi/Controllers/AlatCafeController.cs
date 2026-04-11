@@ -18,29 +18,15 @@ namespace MyVinCafeNewApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllAlat()
         {
-            try
-            {
-                var alatList = await _alatService.GetAllAlatAsync();
-                return Ok(alatList);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);    
-            }
+           var alatList = await _alatService.GetAllAlatAsync();
+            return Ok(alatList);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAlatById(int id)
         {
-            try
-            {
-                var alat = await _alatService.GetAlatByIdAsync(id);
-                return Ok(alat);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
+            var alat = await _alatService.GetAlatByIdAsync(id);
+            return Ok(alat);
         }
 
         [HttpPost]

@@ -23,6 +23,8 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+app.UseMiddleware<MyVinCafeNewApi.Middleware.ErrorHandleMiddleware>();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -33,8 +35,15 @@ if (app.Environment.IsDevelopment())
         option.SwaggerEndpoint("/openapi/v1.json", "v1");
     });
 }
+app.UseExceptionHandler("/error");
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
