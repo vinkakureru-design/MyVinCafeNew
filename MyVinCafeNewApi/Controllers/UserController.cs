@@ -18,28 +18,14 @@ namespace MyVinCafeNewApi.Controllers
         public async Task<IActionResult> Login([FromBody] UserModel request)
         {
             var resultLogin = await _userService.LoginAsync(request);
-            if (resultLogin)
-            {
-                return Ok("Login berhasil!");
-            }
-            else
-            {
-                return BadRequest("Login gagal!");
-            }
+            return Ok(resultLogin);
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserModel request)
         {
             var resultRegister = await _userService.RegisterAsync(request);
-            if (resultRegister)
-            {
-                return Ok("Registrasi berhasil!");
-            }
-            else
-            {
-                return BadRequest("Registrasi gagal!");
-            }
+            return Ok(resultRegister);
         }
     }
 }

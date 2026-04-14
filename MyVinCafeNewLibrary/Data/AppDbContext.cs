@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using MyVinCafeNewLibrary.Feature.MenuProdukManagement;
 using MyVinCafeNewLibrary.Feature.UserManagement;
 using MyVinCafeNewLibrary.Feature.AlatKafeManagement;
+using MyVinCafeNewLibrary.Feature.OrderManagement;
 
 namespace MyVinCafeNewLibrary.Data
 {
@@ -18,6 +19,7 @@ namespace MyVinCafeNewLibrary.Data
         public DbSet<UserModel> Users { get; set; }
         public DbSet<MenuModels> Menus { get; set; }
         public DbSet<AlatCafeModel> Alats { get; set; }
+        public DbSet<OrderModel> Orders { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
