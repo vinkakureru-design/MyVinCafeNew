@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace MyVinCafeNewLibrary.Feature.UserManagement
 {
-    public class UserModel
+    public class KaryawanModel
     {
         [Key]
-        public int Iduser { get; set; } 
+        public int IdKaryawan { get; set; }
+        [Required]
+        public string Nama { get; set; } = null!;
         [Required]
         public string Username { get; set; } = null!;
         [Required]
@@ -21,7 +25,5 @@ namespace MyVinCafeNewLibrary.Feature.UserManagement
         public string Phone { get; set; } = null!;
         [Required]
         public string Role { get; set; } = null!;
-
-
     }
 }

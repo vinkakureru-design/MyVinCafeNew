@@ -43,7 +43,7 @@ namespace MyVinCafeNewLibrary.Feature.OrderManagement
                 .ToListAsync();
             if (orders == null || orders.Count == 0)
             {
-                throw new Exception("Order Kosong");
+                throw new KeyNotFoundException("Order Kosong");
             }
             return orders;
         }
@@ -52,22 +52,29 @@ namespace MyVinCafeNewLibrary.Feature.OrderManagement
             var order = _context.Orders.FirstOrDefault(o => o.IdOrder == id);
             if (order == null)
             {
-                throw new Exception("Order Tidak Temukan");
+                throw new KeyNotFoundException("Order Tidak Temukan");
             }
             return order;
         }
         public async Task<bool> CreateOrderAsync(OrderModel order)
         {
-            var orders = new OrderModel
+            var menu = await _context.Menus.FindAsync(order.IdMenu);
+            if (menu == null)
+            {
+                throw new KeyNotFoundException("Menu Tidak Ditemukan");
+            }
+
+            var newOrder = new OrderModel
             {
                 IdUser = order.IdUser,
                 IdMenu = order.IdMenu,
                 Quantity = order.Quantity,
-                TotalHarga = order.TotalHarga,
+                TotalHarga = menu.Harga * order.Quantity,
                 Status = Status.Menunggu,
-                TanggalOrder = DateTime.Now
+                TanggalOrder = order.TanggalOrder
             };
-            _context.Orders.Add(order);
+
+            _context.Orders.Add(newOrder);
             return await _context.SaveChangesAsync() > 0;
         }
 
@@ -76,7 +83,7 @@ namespace MyVinCafeNewLibrary.Feature.OrderManagement
             var existingOrder = _context.Orders.FirstOrDefault(o => o.IdOrder == id);
             if (existingOrder == null)
             {
-                throw new Exception("Order Tidak Temukan");
+                throw new KeyNotFoundException("Order Tidak Temukan");
             }
             existingOrder.IdUser = order.IdUser;
             existingOrder.IdMenu = order.IdMenu;
@@ -93,7 +100,7 @@ namespace MyVinCafeNewLibrary.Feature.OrderManagement
             var existingOrder = _context.Orders.FirstOrDefault(o => o.IdOrder == id);
             if (existingOrder == null)
             {
-                throw new Exception("Order Tidak Temukan");
+                throw new KeyNotFoundException("Order Tidak Temukan");
             }
             existingOrder.Status = Status.Selesai;
             _context.Orders.Update(existingOrder);
@@ -105,7 +112,7 @@ namespace MyVinCafeNewLibrary.Feature.OrderManagement
             var existingOrder = _context.Orders.FirstOrDefault(o => o.IdOrder == id);
             if (existingOrder == null)
             {
-                throw new Exception("Order Tidak Temukan");
+                throw new KeyNotFoundException("Order Tidak Temukan");
             }
             existingOrder.Status = Status.Dibatalkan;
             _context.Orders.Update(existingOrder);

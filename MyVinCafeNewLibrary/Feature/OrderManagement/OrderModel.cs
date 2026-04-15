@@ -21,7 +21,7 @@ namespace MyVinCafeNewLibrary.Feature.OrderManagement
 
         public int IdUser { get; set; }
         public int IdMenu { get; set; }
-        public UserModel? UserModel { get; set; }
+        public AuthModel? UserModel { get; set; }
         public MenuModels? MenuModels { get; set; }
     }
 }

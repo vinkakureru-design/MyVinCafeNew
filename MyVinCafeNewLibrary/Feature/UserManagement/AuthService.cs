@@ -9,15 +9,15 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace MyVinCafeNewLibrary.Feature.UserManagement
 {
-    public class UserService : IUserService
+    public class AuthService : IAuthService
     {
         private readonly AppDbContext _context;
-        public UserService(AppDbContext context)
+        public AuthService(AppDbContext context)
         {
             _context = context;
         }
 
-        public async Task<UserModel> LoginAsync(UserModel request)
+        public async Task<AuthModel> LoginAsync(AuthModel request)
         {
             var userDb = _context.Users.FirstOrDefault(u => u.Username == request.Username);
             
@@ -34,7 +34,7 @@ namespace MyVinCafeNewLibrary.Feature.UserManagement
             }
 
             await _context.SaveChangesAsync();
-            return new UserModel
+            return new AuthModel
             {
                 Username = userDb.Username,
                 PasswordHash = ""
@@ -42,7 +42,7 @@ namespace MyVinCafeNewLibrary.Feature.UserManagement
 
         }
 
-        public async Task<bool> RegisterAsync(UserModel request)
+        public async Task<bool> RegisterAsync(AuthModel request)
         {
             var cekUsername = await _context.Users.AnyAsync(u => u.Username == request.Username);
 
@@ -53,7 +53,7 @@ namespace MyVinCafeNewLibrary.Feature.UserManagement
 
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.PasswordHash);
 
-            var userBaru = new UserModel
+            var userBaru = new AuthModel
             {
                 Username = request.Username,
                 PasswordHash = passwordHash,

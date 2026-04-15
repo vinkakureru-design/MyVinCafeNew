@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.MiddlewareAnalysis;
+using System.Reflection.Metadata.Ecma335;
 
 namespace MyVinCafeNewApi.Middleware
 {
@@ -32,11 +33,28 @@ namespace MyVinCafeNewApi.Middleware
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+            var statusCode = StatusCodes.Status500InternalServerError;
+            var message = "Ada kesalahan dalam sistem internal";
+
+            if (exception is KeyNotFoundException)
+            {
+                statusCode = StatusCodes.Status404NotFound;
+                message = exception.Message;
+            }
+
+            else if (exception is ArgumentException)
+            {
+                statusCode = StatusCodes.Status400BadRequest;
+                message = exception.Message;
+            }
+
+            context.Response.StatusCode = statusCode;
+
             var result = new
             {
                 sukses = false,
-                error = "Ada kesalahan dalam sistem internal.",
+                error = message,
                 details = exception.Message
             };
             return context.Response.WriteAsJsonAsync(result);
