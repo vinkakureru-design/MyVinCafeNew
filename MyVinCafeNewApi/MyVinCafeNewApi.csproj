@@ -7,14 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Feature\MenuProdukManagement\MenuModel.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Feature\MenuProdukManagement\MenuModel.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.MiddlewareAnalysis" Version="10.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.5" />

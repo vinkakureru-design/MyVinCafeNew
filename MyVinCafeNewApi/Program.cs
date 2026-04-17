@@ -1,8 +1,6 @@
 using MyVinCafeNewLibrary.Data;
-using MyVinCafeNewLibrary.Feature.UserManagement;
 using Microsoft.EntityFrameworkCore;
-using MyVinCafeNewLibrary.Feature.MenuProdukManagement;
-using MyVinCafeNewLibrary.Feature.AlatKafeManagement;
+using MyVinCafeNewApi.Feature.UserManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,9 +12,8 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Dependency Injection
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IMenuService, MenuService>();
-builder.Services.AddScoped<IAlatService, AlatService>();
+
+builder.Services.AddScoped<IUserService, UserService>();
 
 
 builder.Services.AddOpenApi();

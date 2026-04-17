@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
-using MyVinCafeNewLibrary.Feature.MenuProdukManagement;
-using MyVinCafeNewLibrary.Feature.UserManagement;
-using MyVinCafeNewLibrary.Feature.AlatKafeManagement;
-using MyVinCafeNewLibrary.Feature.OrderManagement;
+using MyVinCafeNewApi.Feature.UserManagement;
 
 namespace MyVinCafeNewLibrary.Data
 {
@@ -16,11 +13,7 @@ namespace MyVinCafeNewLibrary.Data
         {
         }
 
-        public DbSet<AuthModel> Users { get; set; }
-        public DbSet<MenuModels> Menus { get; set; }
-        public DbSet<AlatCafeModel> Alats { get; set; }
-        public DbSet<OrderModel> Orders { get; set; }
-        public DbSet<KaryawanModel> Karyawans { get; set; }
+        public DbSet<UserModel> Users { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MyVinCafeNewLibrary.Feature.UserManagement;
+using MyVinCafeNewApi.Feature.UserManagement;
+using MyVinCafeNewLibrary.Dtos.UserDto;
 
 namespace MyVinCafeNewApi.Controllers
 {
@@ -8,24 +9,32 @@ namespace MyVinCafeNewApi.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService _userService;
-        public AuthController(IAuthService userService)
+        private readonly IUserService _userService;
+        public AuthController(IUserService userService)
         {
             _userService = userService;
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] AuthModel request)
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterUser request)
         {
-            var resultLogin = await _userService.LoginAsync(request);
-            return Ok(resultLogin);
+            var result = await _userService.RegisterUserAsync(request);
+            if (result)
+            {
+                return Ok(new { Message = "Registrasi berhasil" });
+            }
+            return BadRequest(new { Message = "Registrasi gagal" });
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] AuthModel request)
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginUser request)
         {
-            var resultRegister = await _userService.RegisterAsync(request);
-            return Ok(resultRegister);
+            var result = await _userService.LoginUserAsync(request);
+            if (result)
+            {
+                return Ok(new { Message = "Login berhasil" });
+            }
+            return BadRequest(new { Message = "Login gagal" });
         }
     }
 }
