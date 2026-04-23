@@ -4,6 +4,7 @@ using System.ComponentModel.Design;
 using System.Data.Common;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using MyVinCafeNewApi.Feature.IngredientManagement;
 using MyVinCafeNewApi.Feature.MenuManagement;
 using MyVinCafeNewApi.Feature.StuffManagement;
 using MyVinCafeNewApi.Feature.UserManagement;
@@ -19,6 +20,7 @@ namespace MyVinCafeNewLibrary.Data
         public DbSet<UserModel> Users { get; set; }
         public DbSet<MenuModel> Menus { get; set; }
         public DbSet<StuffModel> Stuffs { get; set; }
+        public DbSet<IngredientModel> Ingredients { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
