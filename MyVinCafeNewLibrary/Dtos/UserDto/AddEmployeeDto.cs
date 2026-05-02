@@ -12,6 +12,6 @@ namespace MyVinCafeNewLibrary.Dtos.UserDto
         [Required][EmailAddress] public string Email { get; set; } = string.Empty;
         [Required][Phone] public string Phone { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
-        public bool Employee { get; set; } = false;
+        public bool Employee { get; set; } = true;
     }
 }

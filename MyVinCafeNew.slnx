@@ -1,7 +1,5 @@
 <Solution>
   <Project Path="MyVinCafeNewApi/MyVinCafeNewApi.csproj" />
   <Project Path="MyVinCafeNewLibrary/MyVinCafeNewLibrary.csproj" Id="1cc25d97-efa3-4865-b00f-49f445db1e3b" />
-  <Project Path="MyVinCafeNewMaui/MyVinCafeNewMaui.Shared/MyVinCafeNewMaui.Shared.csproj" Id="dbf7a2c1-e2cc-4ebf-b12d-cdfd2fca6db4" />
-  <Project Path="MyVinCafeNewMaui/MyVinCafeNewMaui.Web/MyVinCafeNewMaui.Web.csproj" Id="c3f857b7-79eb-4428-8bc9-35a29b0c49ce" />
-  <Project Path="MyVinCafeNewMaui/MyVinCafeNewMaui/MyVinCafeNewMaui.csproj" Id="f13b6eea-d667-470d-a211-8727f738a941" />
+  <Project Path="MyVinCafeNewWebViews/MyVinCafeNewWebViews.csproj" Id="ccd45c87-638b-4bb9-82ea-11961d4026d2" />
 </Solution>

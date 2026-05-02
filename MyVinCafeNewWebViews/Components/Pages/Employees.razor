@@ -1,0 +1,53 @@
+﻿<!-- MODAL FOR EMPLOYEE -->
+<div class="modal fade" id="employeeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Tambah Karyawan Baru</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="employeeForm">
+                    <input type="hidden" id="editIndex" value="-1">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Username</label>
+                            <input type="text" class="form-control rounded-3" id="inpUserName" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Password</label>
+                            <input type="password" class="form-control rounded-3" id="inpPassword" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Email</label>
+                            <input type="email" class="form-control rounded-3" id="inpEmail" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Phone</label>
+                            <input type="tel" class="form-control rounded-3" id="inpPhone" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Role</label>
+                            <select class="form-select rounded-3" id="inpRole">
+                                <option value="Admin">Admin</option>
+                                <option value="Barista">Barista</option>
+                                <option value="Server">Server</option>
+                                <option value="Manager">Manager</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end ps-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="inpIsEmployee" checked>
+                                <label class="form-check-label small fw-bold" for="inpIsEmployee">Aktif</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-yuru" onclick="saveEmployee()">Simpan Data</button>
+            </div>
+        </div>
+    </div>
+</div>

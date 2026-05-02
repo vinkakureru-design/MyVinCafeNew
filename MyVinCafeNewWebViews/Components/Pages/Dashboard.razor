@@ -1,0 +1,56 @@
+﻿@page "/"
+
+<!-- PAGE: DASHBOARD -->
+<div id="page-dashboard" class="page-section">
+    <h2 class="mb-4" id="greeting-text">Halo, Admin! <i class="fas fa-mug-hot text-brown"></i></h2>
+                
+    <div class="row g-4">
+        <!-- Stat 1: Total Employee -->
+        <div class="col-md-6 col-lg-4">
+            <div class="yuru-card p-4 d-flex align-items-center justify-content-between">
+                <div>
+                    <h6 class="text-muted">Total Karyawan</h6>
+                    <h2 id="count-employees">0</h2>
+                </div>
+                <div class="stat-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+            </div>
+        </div>
+                    
+        <!-- Stat 2: Total Member -->
+        <div class="col-md-6 col-lg-4">
+            <div class="yuru-card p-4 d-flex align-items-center justify-content-between">
+                <div>
+                    <h6 class="text-muted">Total Member</h6>
+                    <h2 id="count-members">124</h2>
+                </div>
+                <div class="stat-icon" style="color: var(--yuru-forest);">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decorative Card -->
+        <div class="col-md-12 col-lg-4">
+            <div class="yuru-card p-4 bg-info text-white" style="background: linear-gradient(135deg, #A0D2EB, #8FBC8F) !important;">
+                <h5>Cuaca Hari Ini</h5>
+                <p class="mb-0 small">Sempurna untuk berkemah dan menyeduh kopi di cafe!</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <div class="yuru-card p-4">
+            <h5>Aktivitas Terakhir</h5>
+            <ul class="list-group list-group-flush mt-3">
+                <li class="list-group-item bg-transparent border-0 ps-0">
+                    <i class="fas fa-check-circle text-success me-2"></i> Karyawan <strong>Nadeshiko</strong> baru saja login.
+                </li>
+                <li class="list-group-item bg-transparent border-0 ps-0">
+                    <i class="fas fa-plus-circle text-primary me-2"></i> Member baru <strong>Aoi Inuyama</strong> terdaftar.
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
