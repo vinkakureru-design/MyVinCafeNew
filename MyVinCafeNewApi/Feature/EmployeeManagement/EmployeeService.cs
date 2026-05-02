@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
-using MyVinCafeNewApi.Feature.UserManagement;
-using MyVinCafeNewApi.Middleware;
 using MyVinCafeNewLibrary.Data;
 using MyVinCafeNewLibrary.Dtos.UserDto;
 using Microsoft.EntityFrameworkCore;
+using MyVinCafeNewApi.Feature.UserManagement;
 
 namespace MyVinCafeNewApi.Feature.EmployeeManagement
 {
@@ -23,7 +22,7 @@ namespace MyVinCafeNewApi.Feature.EmployeeManagement
                 throw new Exception(new { Message = "Tidak ada karyawan ditemukan" }.ToString());
             }
 
-            return employees;
+            return employees;   
         }
 
         public async Task<UserModel> GetEmployeeByIdAsync(int id)

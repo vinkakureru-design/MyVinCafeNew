@@ -19,11 +19,13 @@ namespace MyVinCafeNewApi.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterUser request)
         {
             var result = await _userService.RegisterUserAsync(request);
-            if (result)
+
+            if (result == null)
             {
-                return Ok(new { Message = "Registrasi berhasil" });
+                return BadRequest(new { Message = "Registrasi Gagal" });
             }
-            return BadRequest(new { Message = "Registrasi gagal" });
+            
+            return Ok(new { Message = "Registrasi Berhasil" });
         }
 
         [HttpPost("login")]

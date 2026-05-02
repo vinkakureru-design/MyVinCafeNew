@@ -5,6 +5,7 @@ using MyVinCafeNewApi.Feature.StuffManagement;
 using MyVinCafeNewApi.Feature.MenuManagement;
 using MyVinCafeNewApi.Feature.EmployeeManagement;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -24,20 +25,34 @@ builder.Services.AddScoped<IEmployeService, EmployeeService>();
 
 builder.Services.AddOpenApi();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("BlazorPolicy", policy =>
+    {
+        policy.WithOrigins("https://localhost:7091") // Isi dengan URL proyek Blazor kamu
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 app.UseMiddleware<MyVinCafeNewApi.Middleware.ErrorHandleMiddleware>();
 
 // Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+        app.MapOpenApi();
 
-    app.UseSwaggerUI(option =>
-    {
-        option.SwaggerEndpoint("/openapi/v1.json", "v1");
-    });
+        app.UseSwaggerUI(option =>
+        {
+            option.SwaggerEndpoint("/openapi/v1.json", "v1");
+        });
 }
+
+app.UseCors("BlazorPolicy");
+
 app.UseExceptionHandler("/error");
 
 app.UseHttpsRedirection();

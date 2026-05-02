@@ -15,7 +15,7 @@ namespace MyVinCafeNewApi.Feature.UserManagement
             _context = context;
         }
 
-        public async Task<bool> RegisterUserAsync(RegisterUser request)
+        public async Task<UserModel> RegisterUserAsync(RegisterUser request)
         {
             var existingUser = _context.Users.FirstOrDefault(u => u.Username == request.UserName);
             if (existingUser != null) {
@@ -28,12 +28,13 @@ namespace MyVinCafeNewApi.Feature.UserManagement
                 PasswordHash = request.Password,
                 Email = request.Email,
                 Phone = request.Phone,
-                Role = request.Role
+                Role = request.Role,
+                Employee = request.Employee
             };
 
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
-            return true;
+            return newUser;
         }
 
         public async Task<bool> LoginUserAsync(LoginUser request)

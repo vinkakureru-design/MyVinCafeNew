@@ -31,4 +31,8 @@
     <ProjectReference Include="..\MyVinCafeNewLibrary\MyVinCafeNewLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Feature\IngredientManagement\" />
+  </ItemGroup>
+
 </Project>
