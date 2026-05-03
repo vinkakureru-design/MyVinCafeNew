@@ -1,53 +1,216 @@
-﻿<!-- MODAL FOR EMPLOYEE -->
-<div class="modal fade" id="employeeModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalTitle">Tambah Karyawan Baru</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <form id="employeeForm">
-                    <input type="hidden" id="editIndex" value="-1">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label small fw-bold">Username</label>
-                            <input type="text" class="form-control rounded-3" id="inpUserName" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label small fw-bold">Password</label>
-                            <input type="password" class="form-control rounded-3" id="inpPassword" required>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label small fw-bold">Email</label>
-                            <input type="email" class="form-control rounded-3" id="inpEmail" required>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label small fw-bold">Phone</label>
-                            <input type="tel" class="form-control rounded-3" id="inpPhone" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label small fw-bold">Role</label>
-                            <select class="form-select rounded-3" id="inpRole">
-                                <option value="Admin">Admin</option>
-                                <option value="Barista">Barista</option>
-                                <option value="Server">Server</option>
-                                <option value="Manager">Manager</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 d-flex align-items-end ps-4">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="inpIsEmployee" checked>
-                                <label class="form-check-label small fw-bold" for="inpIsEmployee">Aktif</label>
+﻿@page "/employees"
+@rendermode InteractiveServer
+@using MyVinCafeNewLibrary.Dtos.UserDto
+
+<PageTitle>Manage Employees - MyVinCafe</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Manajemen Karyawan</h2>
+    <button class="btn btn-yuru" @onclick="OpenAddModal">
+        <i class="fas fa-plus me-2"></i> Tambah Karyawan
+    </button>
+</div>
+
+<!-- Tabel Karyawan -->
+<div class="table-responsive yuru-card p-3">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (EmployeeList == null || !EmployeeList.Any())
+            {
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">Belum ada data karyawan.</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var emp in EmployeeList)
+                {
+                    <tr>
+                        <td class="fw-bold text-primary">@emp.UserName</td>
+                        <td>@emp.Email</td>
+                        <td>@emp.Phone</td>
+                        <td><span class="badge bg-info text-dark rounded-pill">@emp.Role</span></td>
+                        <td>
+                            @if (emp.Employee)
+                            {
+                                <span class="text-success"><i class="fas fa-check-circle"></i> Aktif</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger"><i class="fas fa-times-circle"></i> Non-Aktif</span>
+                            }
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary me-1" @onclick="() => OpenEditModal(emp)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteEmployee(emp)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Karyawan -->
+@if (IsModalVisible)
+{
+    <!-- Latar belakang gelap (Backdrop) -->
+    <div class="modal-backdrop fade show" style="z-index: 1040;"></div>
+    
+    <!-- Dialog Modal -->
+    <div class="modal fade show d-block" tabindex="-1" style="z-index: 1050;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@ModalTitle</h5>
+                    <button type="button" class="btn-close btn-close-white" @onclick="CloseModal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    
+                    <!-- EditForm Blazor otomatis menangani validasi dari DTO -->
+                    <EditForm Model="CurrentEmployee" OnValidSubmit="SaveEmployee">
+                        <DataAnnotationsValidator />
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Username</label>
+                                <InputText class="form-control rounded-3" @bind-Value="CurrentEmployee.UserName" />
+                                <ValidationMessage For="@(() => CurrentEmployee.UserName)" class="text-danger small" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Password</label>
+                                <InputText type="password" class="form-control rounded-3" @bind-Value="CurrentEmployee.Password" />
+                                <ValidationMessage For="@(() => CurrentEmployee.Password)" class="text-danger small" />
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold">Email</label>
+                                <InputText type="email" class="form-control rounded-3" @bind-Value="CurrentEmployee.Email" />
+                                <ValidationMessage For="@(() => CurrentEmployee.Email)" class="text-danger small" />
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold">Phone</label>
+                                <InputText type="tel" class="form-control rounded-3" @bind-Value="CurrentEmployee.Phone" />
+                                <ValidationMessage For="@(() => CurrentEmployee.Phone)" class="text-danger small" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Role</label>
+                                <InputSelect class="form-select rounded-3" @bind-Value="CurrentEmployee.Role">
+                                    <option value="Admin">Admin</option>
+                                    <option value="Barista">Barista</option>
+                                    <option value="Server">Server</option>
+                                    <option value="Manager">Manager</option>
+                                </InputSelect>
+                            </div>
+                            <div class="col-md-6 d-flex align-items-end ps-4">
+                                <div class="form-check form-switch">
+                                    <InputCheckbox class="form-check-input" @bind-Value="CurrentEmployee.Employee" id="isEmployeeCheck" />
+                                    <label class="form-check-label small fw-bold" for="isEmployeeCheck">Aktif (Employee)</label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer border-0">
-                <button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-yuru" onclick="saveEmployee()">Simpan Data</button>
+
+                        <div class="modal-footer border-0 px-0 pb-0 mt-4">
+                            <button type="button" class="btn btn-light rounded-3" @onclick="CloseModal">Batal</button>
+                            <button type="submit" class="btn btn-yuru">Simpan Data</button>
+                        </div>
+                    </EditForm>
+
+                </div>
             </div>
         </div>
     </div>
-</div>
+}
+
+@code {
+    // Simulasi Database di memori (Nanti diganti dengan panggilan HttpClient ke API)
+    private List<RegisterUser> EmployeeList = new();
+    
+    // Model yang sedang diikat ke Form
+    private RegisterUser CurrentEmployee = new();
+    
+    // State Modal
+    private bool IsModalVisible = false;
+    private string ModalTitle = "Tambah Karyawan";
+    private bool IsEditMode = false;
+    private RegisterUser? _employeeToEdit;
+
+    protected override void OnInitialized()
+    {
+        // Menambahkan data awal (Mock Data)
+        EmployeeList.Add(new RegisterUser { UserName = "rin_shima", Password = "123", Email = "rin@cafe.com", Phone = "0812345678", Role = "Admin", Employee = true });
+        EmployeeList.Add(new RegisterUser { UserName = "nadeshiko", Password = "123", Email = "nadeshiko@cafe.com", Phone = "0819998887", Role = "Barista", Employee = true });
+    }
+
+    private void OpenAddModal()
+    {
+        ModalTitle = "Tambah Karyawan Baru";
+        CurrentEmployee = new RegisterUser { Role = "Barista", Employee = true }; // Nilai default form
+        IsEditMode = false;
+        IsModalVisible = true;
+    }
+
+    private void OpenEditModal(RegisterUser employee)
+    {
+        ModalTitle = "Edit Karyawan";
+        _employeeToEdit = employee;
+        
+        // Buat salinan agar tabel tidak langsung berubah sebelum tombol "Simpan" ditekan
+        CurrentEmployee = new RegisterUser
+        {
+            UserName = employee.UserName,
+            Password = employee.Password,
+            Email = employee.Email,
+            Phone = employee.Phone,
+            Role = employee.Role,
+            Employee = employee.Employee
+        };
+        
+        IsEditMode = true;
+        IsModalVisible = true;
+    }
+
+    private void CloseModal()
+    {
+        IsModalVisible = false;
+    }
+
+    private void SaveEmployee()
+    {
+        if (IsEditMode && _employeeToEdit != null)
+        {
+            // Update data yang ada
+            _employeeToEdit.UserName = CurrentEmployee.UserName;
+            _employeeToEdit.Password = CurrentEmployee.Password;
+            _employeeToEdit.Email = CurrentEmployee.Email;
+            _employeeToEdit.Phone = CurrentEmployee.Phone;
+            _employeeToEdit.Role = CurrentEmployee.Role;
+            _employeeToEdit.Employee = CurrentEmployee.Employee;
+        }
+        else
+        {
+            // Tambah data baru
+            EmployeeList.Add(CurrentEmployee);
+        }
+
+        IsModalVisible = false;
+    }
+
+    private void DeleteEmployee(RegisterUser employee)
+    {
+        EmployeeList.Remove(employee);
+    }
+}

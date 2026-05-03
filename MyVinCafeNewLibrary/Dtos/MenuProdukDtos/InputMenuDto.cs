@@ -7,6 +7,7 @@ namespace MyVinCafeNewLibrary.Dtos.MenuProdukDtos
 {
     public class InputMenuDto
     {
+        [Key] public int Id { get; set; }
         [Required] public string NamaMenu { get; set; } = string.Empty;
         [Required] public double Harga { get; set; } = 0;
         public string Deskripsi { get; set; } = string.Empty;

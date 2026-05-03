@@ -1,11 +1,14 @@
 ﻿@inherits LayoutComponentBase
 
-    <div class="d-flex">
-        <!-- Komponen Sidebar -->
-        <NavMenu />
+<div class="d-flex">
+    <!-- Ini akan memanggil file NavMenu.razor kamu -->
+    <NavMenu />
 
-        <!-- Konten Utama (Berubah-ubah sesuai URL) -->
-        <main class="main-content">
-            @Body
-        </main>
-    </div>
+    <!-- Ini adalah tempat halaman berubah-ubah (Dashboard, Employees, dll) -->
+    <main class="main-content w-100">
+        @Body
+    </main>
+</div>
+
+<!-- Tempat memunculkan notifikasi/toast -->
+<div id="toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 2500"></div>

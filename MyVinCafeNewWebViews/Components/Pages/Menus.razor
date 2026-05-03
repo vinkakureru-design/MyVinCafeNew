@@ -1,0 +1,201 @@
+﻿@page "/menus"
+@rendermode InteractiveServer
+@using MyVinCafeNewLibrary.Dtos.MenuProdukDtos
+
+<PageTitle>Manage Menus - MyVinCafe</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Daftar Menu Kafe <i class="fas fa-coffee text-brown"></i></h2>
+    <button class="btn btn-yuru" @onclick="OpenAddModal">
+        <i class="fas fa-plus me-2"></i> Tambah Menu
+    </button>
+</div>
+
+<!-- Tabel Menu -->
+<div class="table-responsive yuru-card p-3">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Nama Menu</th>
+                <th>Kategori</th>
+                <th>Harga</th>
+                <th>Status Ketersediaan</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (MenuList == null || !MenuList.Any())
+            {
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">Belum ada data menu.</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var menu in MenuList)
+                {
+                    <tr>
+                        <td class="fw-bold text-primary">@menu.NamaMenu</td>
+                        <td><span class="badge bg-secondary rounded-pill">@menu.Kategori</span></td>
+                        <td>Rp @menu.Harga.ToString("N0")</td>
+                        <td>
+                            @if (menu.IsAvailable)
+                            {
+                                <span class="text-success"><i class="fas fa-check-circle"></i> Tersedia</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger"><i class="fas fa-times-circle"></i> Habis</span>
+                            }
+                        </td>
+                        <td>
+                            
+                            <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteMenu(menu)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Menu -->
+@if (IsModalVisible)
+{
+    <div class="modal-backdrop fade show" style="z-index: 1040;"></div>
+    <div class="modal fade show d-block" tabindex="-1" style="z-index: 1050;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@ModalTitle</h5>
+                    <button type="button" class="btn-close btn-close-white" @onclick="CloseModal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    
+                    <EditForm Model="CurrentMenu" OnValidSubmit="SaveMenu">
+                        <DataAnnotationsValidator />
+
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label small fw-bold">Nama Menu</label>
+                                <InputText class="form-control rounded-3" @bind-Value="CurrentMenu.NamaMenu" placeholder="Cth: Kopi Kari Premium" />
+                                <ValidationMessage For="@(() => CurrentMenu.NamaMenu)" class="text-danger small" />
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Harga (Rp)</label>
+                                <InputNumber class="form-control rounded-3" @bind-Value="CurrentMenu.Harga" />
+                                <ValidationMessage For="@(() => CurrentMenu.Harga)" class="text-danger small" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Kategori</label>
+                                <InputSelect class="form-select rounded-3" @bind-Value="CurrentMenu.Kategori">
+                                    <option value="">-- Pilih Kategori --</option>
+                                    <option value="Kopi">Kopi</option>
+                                    <option value="Teh">Teh</option>
+                                    <option value="Makanan Utama">Makanan Utama</option>
+                                    <option value="Snack">Snack / Camilan</option>
+                                    <option value="Dessert">Dessert</option>
+                                </InputSelect>
+                                <ValidationMessage For="@(() => CurrentMenu.Kategori)" class="text-danger small" />
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <div class="form-check form-switch">
+                                    <InputCheckbox class="form-check-input" @bind-Value="CurrentMenu.IsAvailable" id="isAvailableCheck" />
+                                    <label class="form-check-label small fw-bold" for="isAvailableCheck">Tersedia untuk dipesan</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer border-0 px-0 pb-0 mt-4">
+                            <button type="button" class="btn btn-light rounded-3" @onclick="CloseModal">Batal</button>
+                            <button type="submit" class="btn btn-yuru">Simpan Menu</button>
+                        </div>
+                    </EditForm>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    // Menggunakan OutputMenuDto untuk list tampilan karena memiliki Id
+    private List<OutputMenuDto> MenuList = new();
+    
+    // Menggunakan InputMenuDto untuk Form sesuai arsitektur DTO Anda
+    private InputMenuDto CurrentMenu = new();
+    
+    private bool IsModalVisible = false;
+    private string ModalTitle = "Tambah Menu";
+    private bool IsEditMode = false;
+    private Guid _editingMenuId;
+
+    protected override void OnInitialized()
+    {
+        // Mock Data Awal
+        MenuList.Add(new OutputMenuDto {NamaMenu = "Hot Cocoa Ala Nadeshiko", Kategori = "Minuman", Harga = 25000, IsAvailable = true });
+        MenuList.Add(new OutputMenuDto {NamaMenu = "Sup Kari Sosis", Kategori = "Makanan Utama", Harga = 45000, IsAvailable = true });
+    }
+
+    private void OpenAddModal()
+    {
+        ModalTitle = "Tambah Menu Baru";
+        CurrentMenu = new InputMenuDto { IsAvailable = true };
+        IsEditMode = false;
+        IsModalVisible = true;
+    }
+
+    private void OpenEditModal(InputMenuDto menu)
+    {
+        ModalTitle = "Edit Menu";
+        _editingMenuId = menu.Id;
+        
+        // Memetakan OutputDto ke InputDto untuk diedit
+        CurrentMenu = new InputMenuDto
+        {
+            NamaMenu = menu.NamaMenu,
+            Harga = menu.Harga,
+            Kategori = menu.Kategori,
+            IsAvailable = menu.IsAvailable
+        };
+        
+        IsEditMode = true;
+        IsModalVisible = true;
+    }
+
+    private void CloseModal() => IsModalVisible = false;
+
+    private void SaveMenu()
+    {
+        if (IsEditMode)
+        {
+            var menu = MenuList.FirstOrDefault(m => m.Id == _editingMenuId);
+            if (menu != null)
+            {
+                menu.NamaMenu = CurrentMenu.NamaMenu;
+                menu.Harga = CurrentMenu.Harga;
+                menu.Kategori = CurrentMenu.Kategori;
+                menu.IsAvailable = CurrentMenu.IsAvailable;
+            }
+        }
+        else
+        {
+            MenuList.Add(new OutputMenuDto
+            {
+                Id = Guid.NewGuid(),
+                NamaMenu = CurrentMenu.NamaMenu,
+                Harga = CurrentMenu.Harga,
+                Kategori = CurrentMenu.Kategori,
+                IsAvailable = CurrentMenu.IsAvailable
+            });
+        }
+        IsModalVisible = false;
+    }
+
+    private void DeleteMenu(OutputMenuDto menu) => MenuList.Remove(menu);
+}
